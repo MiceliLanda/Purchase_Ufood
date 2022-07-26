@@ -11,7 +11,7 @@ from models.user import tableUser
 userRoute = APIRouter()
 
 @userRoute.post("/user/recharge")
-def rechargeCredits(email: str,creditos: int):
+async def rechargeCredits(email: str,creditos: int):
     try:
         credito = conn.execute(select([tableUser.c.credits]).where(tableUser.c.email == email)).first()
         if credito is None:
@@ -25,7 +25,7 @@ def rechargeCredits(email: str,creditos: int):
         return {"Error":str(e)}
 
 @userRoute.post("/user/purchase")
-def purchase(id:int,total: int):
+async def purchase(id:int,total: int):
     try:
         credito = conn.execute(select([tableUser.c.credits]).where(tableUser.c.id == id)).first()
         if credito is None:
