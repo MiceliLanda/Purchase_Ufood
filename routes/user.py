@@ -20,12 +20,12 @@ async def rechargeCredits(email: str,creditos: int):
             newCredits = credito[0]+creditos
             conn.execute(tableUser.update().where(tableUser.c.email == email).values(credits=newCredits))
             newcredito = conn.execute(select([tableUser.c.credits]).where(tableUser.c.email == email)).first()
-            return {"Credits": newcredito[0]}
+            return {"credits": newcredito[0]}
     except Exception as e:
         return {"Error":str(e)}
 
 @userRoute.post("/user/purchase")
-async def purchase(id:int,total: int):
+async def purchase(user_id:int,total: int):
     try:
         credito = conn.execute(select([tableUser.c.credits]).where(tableUser.c.id == id)).first()
         if credito is None:
@@ -35,9 +35,9 @@ async def purchase(id:int,total: int):
                 return JSONResponse({"message": "No tiene créditos suficientes, haga una recarga"}, status_code=status.HTTP_402_PAYMENT_REQUIRED)
             else:
                 newCredits = credito[0]-total
-                conn.execute(tableUser.update().where(tableUser.c.id == id).values(credits=newCredits))
-                newcredito = conn.execute(select([tableUser.c.credits]).where(tableUser.c.id == id)).first()
-            return {"Credits": newcredito[0]}
+                conn.execute(tableUser.update().where(tableUser.c.id == user_id).values(credits=newCredits))
+                newcredito = conn.execute(select([tableUser.c.credits]).where(tableUser.c.id == user_id)).first()
+            return {"rredits": newcredito[0]}
         
     except Exception as e:
         return {"Error":str(e)}
