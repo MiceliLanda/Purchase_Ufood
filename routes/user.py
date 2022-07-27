@@ -27,7 +27,7 @@ async def rechargeCredits(email: str,creditos: int):
 @userRoute.post("/user/purchase")
 async def purchase(user_id:int,total: int):
     try:
-        credito = conn.execute(select([tableUser.c.credits]).where(tableUser.c.id == id)).first()
+        credito = conn.execute(select([tableUser.c.credits]).where(tableUser.c.id == user_id)).first()
         if credito is None:
             return {"message": "User not found"}, status.HTTP_404_NOT_FOUND
         else:
